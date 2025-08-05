@@ -1,13 +1,16 @@
+import { getOrderedDays } from "@/lib/getOrderedDays";
+
 export default function Header (){
-    const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
-    const today = new Date();
-    const dayIndex = today.getDay();
-    const dayName = days[dayIndex];
-    console.log('today is' + today.getDay());
+    const days = getOrderedDays();
+    console.log("Ordered days:", days);
     return (
         <header>
         <h1>Welcome to My Website</h1>
-        <p>Today is {dayName}</p>
+        {days.map((day, index) => (
+            <div key={index} className="day">
+                {day}
+            </div>
+        ))}
         </header>
     );
 }
