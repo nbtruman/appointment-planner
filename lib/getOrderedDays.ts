@@ -7,7 +7,22 @@ const dayMap = [
     'Friday',
     'Saturday',
     'Sunday',
-];        
+];
+
+const monthMap = [
+    'January',
+    'February',
+    'March',
+    'April',
+    'May',
+    'June',
+    'July',
+    'August',
+    'September',
+    'October',
+    'November',
+    'December',
+];
 
 export type Day = {
     iso: string;
@@ -16,6 +31,7 @@ export type Day = {
     day: number;
     dayOfWeek: number;
     dayString: string;
+    monthString: string;
 }
 
 export function getOrderedDays():Array<Day> {    
@@ -29,6 +45,7 @@ export function getOrderedDays():Array<Day> {
             day: day.day,
             dayOfWeek: day.dayOfWeek,
             dayString: dayMap[day.dayOfWeek - 1],
+            monthString: monthMap[day.month - 1],
         };
     });    
     return days;

@@ -1,17 +1,23 @@
 import { getOrderedDays } from "@/lib/getOrderedDays";
+import type { Appointment } from "@/components/Appointment/Appointment";
+import DayDisplay from "@/components/Day/Day";
 import styles from "./page.module.css";
 
 export default function Home() {
   const days = getOrderedDays();
-  console.log(days);
+  const appointments: Array<Appointment> = [
+    // Example appointments, replace with actual data fetching logic
+    { id: 1, date: '2025-08-07', time: 1000, description: "Doctor's appointment" },
+    { id: 2, date: '2025-08-10', time: 1400, description: "Meeting with client" },
+  ]
   return (
     <div className={styles.page}>
       <main className={styles.main}>
-        {days.map((day, index) => (
-            <div key={index} className="day">
-                {day.dayString}
-            </div>
-        ))}
+        {days.map((day, index) => {
+          const daysAppointments = appointments.filter(appointment => appointment.date === day.iso);
+          
+          return <DayDisplay key={index} day={day} appointments={daysAppointments} />
+        })}
       </main>      
     </div>
   );
