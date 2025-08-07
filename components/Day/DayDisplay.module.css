@@ -2,4 +2,12 @@
     border-top: 1px solid black;
     border-bottom: 1px solid black;
     padding: 10px;
+    display: flex;
+    flex-direction: row;
+}
+
+.date-display {
+    padding: 10px;
+    border-right: 1px solid black;
+    width: 200px;
 }
