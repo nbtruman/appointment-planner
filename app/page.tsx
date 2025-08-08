@@ -12,6 +12,7 @@ export default function Home() {
     { id: 2, dateTime: Temporal.PlainDateTime.from('2025-08-10 14:00'), description: "Meeting with client" },
     { id: 3, dateTime: Temporal.PlainDateTime.from('2025-08-12 09:00'), description: "Dentist"},
   ]
+  
   return (
     <div className={styles.page}>
       <main className={styles.main}>
