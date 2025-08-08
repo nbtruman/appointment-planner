@@ -13,6 +13,19 @@ export default function Home() {
     { id: 3, dateTime: Temporal.PlainDateTime.from('2025-08-12 09:00'), description: "Dentist"},
   ]
   
+  async function load () {
+    const appointments = await fetch('http://localhost:3000/api/appointments');
+
+    if (!appointments.ok) {
+      console.log('something went wrong');
+    } else {
+      const response = await appointments.json();
+      console.log(response);
+    }
+  }
+
+  load()
+
   return (
     <div className={styles.page}>
       <main className={styles.main}>
