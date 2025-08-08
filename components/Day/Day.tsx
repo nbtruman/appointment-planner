@@ -14,7 +14,7 @@ export default function Day({ day, appointments }:  { day: Day , appointments: A
                     <h3>{day.day} {day.monthString} {day.year}</h3>
                 </div>
             </Link>
-            <div>
+            <div className={styles['appointment-container']}>
                 {appointments && appointments.map(appointment => <Appointment key={appointment.id} appointment={appointment} />)}
             </div>
         </div>
