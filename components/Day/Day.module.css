@@ -11,6 +11,10 @@
     width: 200px;
 }
 
+.date-display:hover {
+    text-decoration: underline;
+}
+
 .appointment-container {
     display: flex;
 }

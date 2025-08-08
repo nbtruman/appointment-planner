@@ -4,14 +4,14 @@ import { Temporal } from '@js-temporal/polyfill';
 export type AppointmentProps = { 
     id: number;
     dateTime: Temporal.PlainDateTime;
-    description: string; 
+    description: string;
 }
 
 export default function Appointment ({ appointment }: { appointment: AppointmentProps }) {
     const { id, dateTime, description } = appointment;
     return (
         <div className={styles.appointment}>
-            <h3>{appointment.description}</h3>
+            <h3>{description}</h3>
             <p>{dateTime.toPlainTime().toString().slice(0, 5)}</p>
         </div>
     )
