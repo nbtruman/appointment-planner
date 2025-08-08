@@ -16,7 +16,9 @@ export default function Home() {
     <div className={styles.page}>
       <main className={styles.main}>
         {days.map((day, index) => {
-          const daysAppointments = appointments.filter(appointment => appointment.date === day.iso);          
+          const daysAppointments = appointments
+            .filter(appointment => appointment.date === day.iso)
+            .sort((a, b) => Temporal.PlainTime.compare(a.time, b.time));    
           return <Day key={index} day={day} appointments={daysAppointments} />
         })}
       </main>      
