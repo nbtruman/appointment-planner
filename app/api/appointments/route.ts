@@ -5,8 +5,8 @@ export async function GET(request: Request){
 
     const key = 'user1';
 
-    const raw = await client.lRange(key, 0, -1)
-
+    const raw = await client.get(key)
+    console.log(raw)
     return Response.json(raw);
 }
 
