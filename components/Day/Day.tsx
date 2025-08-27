@@ -4,7 +4,13 @@ import Adder from "../Adder/Adder";
 import Link from "next/link";
 import styles from "./Day.module.css";
 
-export default function Day({ day, appointments }:  { day: Day , appointments: Array<AppointmentProps> }) {
+type DayProps = {
+    day: Day,
+    appointments: Array<AppointmentProps>,
+    addAppointment: (appointment: AppointmentProps) => void
+}
+
+export default function Day({ day, appointments, addAppointment }:  DayProps) {
     
     const href = `/day_view/${day.dayString}`;
     return (
@@ -17,7 +23,7 @@ export default function Day({ day, appointments }:  { day: Day , appointments: A
             </Link>
             <div className={styles['appointment-container']}>
                 {appointments && appointments.map(appointment => <Appointment key={appointment.id} appointment={appointment} />)}
-                <Adder day={day}/>
+                <Adder day={day} setter={addAppointment}/>
             </div>
         </div>
     );

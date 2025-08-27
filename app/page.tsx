@@ -10,12 +10,7 @@ export default function Home() {
   const days = getOrderedDays();
 
   const [ user, setUser ] = useState<string | null>(null);
-  const [ appointments, setAppointments ] = useState<Array<AppointmentProps>>([
-    // Example appointments, replace with actual data fetching logic
-    { id: 1, dateTime: Temporal.PlainDateTime.from('2025-08-26 10:00'), description: "Doctor's appointment" },
-    { id: 2, dateTime: Temporal.PlainDateTime.from('2025-08-27 14:00'), description: "Meeting with client" },
-    { id: 3, dateTime: Temporal.PlainDateTime.from('2025-08-28 09:00'), description: "Dentist"},
-  ])
+  const [ appointments, setAppointments ] = useState<Array<AppointmentProps>>([])
 
   useEffect(() => {
     fetch('/api/getUser')
@@ -38,15 +33,21 @@ export default function Home() {
     .catch(err => console.error(err))
   }, [user])
 
+  const addAppointment = (appointment: AppointmentProps) => {
+    setAppointments(prev => [...prev, appointment]);
+  }
+
+  console.log(appointments);
+
   return (
     <div className={styles.page}>
       <main className={styles.main}>
         <h2>Week View</h2>
         {days.map((day, index) => {
           const daysAppointments = appointments
-            .filter(appointment => appointment.dateTime.toPlainDate().toString() === day.iso)
-            .sort((a, b) => Temporal.PlainTime.compare(a.dateTime.toPlainTime(), b.dateTime.toPlainTime()));
-          return <Day key={index} day={day} appointments={daysAppointments} />
+            .filter(appointment => Temporal.PlainDate.from(appointment.dateTime).toString() === day.iso)
+            .sort((a, b) => Temporal.PlainTime.compare(a.dateTime, b.dateTime));
+          return <Day key={index} day={day} appointments={daysAppointments} addAppointment={addAppointment} />
         })}
       </main>      
     </div>

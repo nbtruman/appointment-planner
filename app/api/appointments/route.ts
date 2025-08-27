@@ -1,7 +1,7 @@
 import { getRedisClient } from "@/lib/redis";
-import { NextResponse } from "next/server";
+import { NextResponse, NextRequest } from "next/server";
 
-type Appointment = {
+export type Appointment = {
     id: string,
     title: string,
     dateTime: string,
@@ -33,17 +33,19 @@ export async function GET(request: Request){
     return NextResponse.json(userData.appointments);
 }
 
-export async function POST(request: Request){
-    try {
-        const appointment = { id: 3, dateTime: '2025-08-12 09:00', description: "Dentist"}
+export async function POST(request: NextRequest){
+    const appointment = await request.json();
 
-        const client = await getRedisClient();
-        const key = 'user1';
+    const cookieStore = await request.cookies;
+    const user = cookieStore.get('userId')?.value;
+    
+    const client = await getRedisClient();
 
-        await client.rPush(key, JSON.stringify(appointment));
+    let userData = await client.json.get(`user:${user}`) as UserData;
 
-        return Response.json(appointment, { status: 201 });
-    } catch (error) {
-        return Response.json({ error: 'Something went wrong'}, {status: 400});
-    }
+    userData.appointments.push(appointment);
+
+    await client.json.set(`user:${user}`, '$', userData);
+
+    return NextResponse.json({ success: true, appointment, user: user })
 }

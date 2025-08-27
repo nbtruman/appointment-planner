@@ -1,9 +1,9 @@
 .adder {
     padding: 0 10px;
     border-right: 1px solid black;
-    width: 250px;
+    width: 350px;
     display: flex;
-    justify-content: center;
+    justify-content: space-around;
     align-items: center;
 }
 
@@ -25,12 +25,6 @@
     display: flex;
     justify-content: center;
     align-items: center;
-}
-
-.plus p {
-    display: flex;
-    justify-content: center;
-    align-items: center;    
 }
 
 .plus:hover {
