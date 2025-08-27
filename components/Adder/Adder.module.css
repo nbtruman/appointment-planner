@@ -1,0 +1,40 @@
+.adder {
+    padding: 0 10px;
+    border-right: 1px solid black;
+    width: 250px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.adder fieldset {
+    border: 0;
+}
+
+.inputs {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.plus {
+    height: 50px;
+    width: 50px;
+    color: green;
+    font-size: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.plus p {
+    display: flex;
+    justify-content: center;
+    align-items: center;    
+}
+
+.plus:hover {
+    border: 1px solid green;
+    border-radius: 50%;
+}
+

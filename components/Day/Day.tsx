@@ -17,7 +17,7 @@ export default function Day({ day, appointments }:  { day: Day , appointments: A
             </Link>
             <div className={styles['appointment-container']}>
                 {appointments && appointments.map(appointment => <Appointment key={appointment.id} appointment={appointment} />)}
-                <Adder />
+                <Adder day={day}/>
             </div>
         </div>
     );
