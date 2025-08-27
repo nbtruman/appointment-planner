@@ -1,5 +1,6 @@
 import type { Day } from "@/lib/getOrderedDays";
 import Appointment, { AppointmentProps } from "@/components/Appointment/Appointment";
+import Adder from "../Adder/Adder";
 import Link from "next/link";
 import styles from "./Day.module.css";
 
@@ -16,6 +17,7 @@ export default function Day({ day, appointments }:  { day: Day , appointments: A
             </Link>
             <div className={styles['appointment-container']}>
                 {appointments && appointments.map(appointment => <Appointment key={appointment.id} appointment={appointment} />)}
+                <Adder />
             </div>
         </div>
     );
