@@ -5,12 +5,13 @@ import Link from "next/link";
 import styles from "./Day.module.css";
 
 type DayProps = {
-    day: Day,
-    appointments: Array<AppointmentProps>,
-    addAppointment: (appointment: AppointmentProps) => void
+    day: Day;
+    appointments: Array<AppointmentProps>;
+    addAppointment: (appointment: AppointmentProps) => void;
+    removeAppointment: (id: string) => void;
 }
 
-export default function Day({ day, appointments, addAppointment }:  DayProps) {
+export default function Day({ day, appointments, addAppointment, removeAppointment }:  DayProps) {
     
     const href = `/day_view/${day.dayString}`;
     return (
@@ -22,7 +23,7 @@ export default function Day({ day, appointments, addAppointment }:  DayProps) {
                 </div>
             </Link>
             <div className={styles['appointment-container']}>
-                {appointments && appointments.map(appointment => <Appointment key={appointment.id} appointment={appointment} />)}
+                {appointments && appointments.map(appointment => <Appointment key={appointment.id} appointment={appointment} removeAppointment={removeAppointment} />)}
                 <Adder day={day} setter={addAppointment}/>
             </div>
         </div>

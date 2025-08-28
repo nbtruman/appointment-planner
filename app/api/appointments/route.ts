@@ -49,3 +49,27 @@ export async function POST(request: NextRequest){
 
     return NextResponse.json({ success: true, appointment, user: user })
 }
+
+export async function DELETE(request: NextRequest){
+    const url = new URL(request.url);
+    const appointmentId = url.searchParams.get('id');
+    if (!appointmentId) {
+        return NextResponse.json({ error: 'No appointment ID supplied in query string' });
+    }
+
+    const cookieStore = await request.cookies;
+    const user = cookieStore.get('userId')?.value;
+    
+    const client = await getRedisClient();
+
+    let userData = await client.json.get(`user:${user}`) as UserData;
+    if (!userData) {
+        return NextResponse.json({ error: 'Could not get user data' });
+    }
+
+    userData.appointments = userData.appointments.filter(appointment => appointment.id!== appointmentId);
+
+    await client.json.set(`user:${user}`, "$", userData);
+
+    return NextResponse.json({ success: true , appointmentId: appointmentId, userId: user });
+}
