@@ -1,19 +1,19 @@
 import { getRedisClient } from "@/lib/redis";
+import getAppointments from "@/lib/getAppointments";
 import { NextResponse, NextRequest } from "next/server";
 
 export type Appointment = {
     id: string,
-    title: string,
+    description: string,
     dateTime: string,
 }
 
-type UserData = {
+export type UserData = {
     appointments: Appointment[],
     contacts: [],
 }
 
 export async function GET(request: Request){
-    const client = await getRedisClient();
     const url = new URL(request.url);
 
     const user = url.searchParams.get('user');
@@ -21,14 +21,7 @@ export async function GET(request: Request){
         return NextResponse.json({ error: 'User ID is required' }, { status: 400 });
     }
 
-    const key = `user:${user}`;
-
-    let userData = await client.json.get(key) as UserData | null;
-
-    if (!userData) {
-        await client.json.set(key, '$', { appointments: [], contacts: [] });
-        userData = { appointments: [], contacts: [] }
-    }
+    const userData = await getAppointments(user);
 
     return NextResponse.json(userData.appointments);
 }

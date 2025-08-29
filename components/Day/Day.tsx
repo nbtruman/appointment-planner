@@ -13,7 +13,7 @@ type DayProps = {
 
 export default function Day({ day, appointments, addAppointment, removeAppointment }:  DayProps) {
     
-    const href = `/day_view/${day.dayString}`;
+    const href = `/day_view/${day.iso}`;
     return (
         <div className={styles["day-display"]}>
             <Link href={href}>
