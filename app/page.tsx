@@ -32,10 +32,10 @@ export default function Home() {
       })
       .then(data => {
         const now = Temporal.Now.plainDateTimeISO();
-
+        
         const futureAppointments = data.filter((appointment: AppointmentProps) => {
           const appointmentDate = Temporal.PlainDateTime.from(appointment.dateTime);
-          
+
           if (Temporal.PlainDateTime.compare(appointmentDate, now) === -1) {
             deleteAppointment(appointment.id).catch(err => console.error(err));
             return false;
@@ -56,8 +56,6 @@ export default function Home() {
   const removeAppointment = (id: string) => {
     setAppointments(prev => prev.filter(a => a.id !== id));
   }
-
-  console.log(appointments);
 
   return (
     <div className={styles.page}>

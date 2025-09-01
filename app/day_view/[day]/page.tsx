@@ -1,8 +1,8 @@
 import { cookies } from "next/headers";
 import getAppointments from "@/lib/getAppointments";
-import deleteAppointment from "@/lib/deleteAppointment";
 import { UserData } from "@/app/api/appointments/route";
-import Appointment, { AppointmentProps } from "@/components/Appointment/Appointment";
+import AppointmentContainer from "@/components/AppointmentContainer/AppointmentContainer";
+import { Day } from "@/lib/getOrderedDays";
 
 export default async function DayView({ params }: { params: { day: string } }) {
   const cookieStore = await cookies();
@@ -19,11 +19,12 @@ export default async function DayView({ params }: { params: { day: string } }) {
 
   const { day } = await params;
 
-  const placeholderFunction = () => {};
+  const dayAppointments = userData.appointments.filter(appointment => appointment.dateTime.slice(0, 10) === day);
 
   return (
     <div>
       <h1>Day View: {day}</h1>
+      <AppointmentContainer appointments={dayAppointments} date={day}/>
     </div>
   );
 }

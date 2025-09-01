@@ -59,7 +59,7 @@ export default function Adder({ day, setter }: { day: Day, setter: (appointment:
                 </fieldset>
                 <fieldset>
                     <label htmlFor={`${day.iso}-time`}>Time:</label>
-                    <input type="time" id={`${day.iso}-time`} name="time" onChange={handleChange}/>
+                    <input type="time" id={`${day.iso}-time`} name="time" value={details.time} onChange={handleChange}/>
                 </fieldset>                
             </div>
             <div className={styles.plus} onClick={handleNewEntry}>
