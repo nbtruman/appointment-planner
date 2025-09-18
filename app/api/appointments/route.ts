@@ -34,7 +34,7 @@ export async function POST(request: NextRequest){
     
     const client = await getRedisClient();
 
-    let userData = await client.json.get(`user:${user}`) as UserData;
+    const userData = await client.json.get(`user:${user}`) as UserData;
 
     userData.appointments.push(appointment);
 
@@ -55,7 +55,7 @@ export async function DELETE(request: NextRequest){
     
     const client = await getRedisClient();
 
-    let userData = await client.json.get(`user:${user}`) as UserData;
+    const userData = await client.json.get(`user:${user}`) as UserData;
     if (!userData) {
         return NextResponse.json({ error: 'Could not get user data' });
     }

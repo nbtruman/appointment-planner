@@ -4,7 +4,6 @@ import styles from './Adder.module.css';
 import type { Day } from '@/lib/getOrderedDays';
 import { useState } from 'react';
 import { AppointmentProps } from '../Appointment/Appointment';
-import { Temporal } from '@js-temporal/polyfill';
 
 export default function Adder({ day, setter }: { day: Day, setter: (appointment: AppointmentProps) => void }){
 

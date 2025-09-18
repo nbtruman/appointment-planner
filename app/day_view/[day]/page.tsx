@@ -2,9 +2,8 @@ import { cookies } from "next/headers";
 import getAppointments from "@/lib/getAppointments";
 import { UserData } from "@/app/api/appointments/route";
 import AppointmentContainer from "@/components/AppointmentContainer/AppointmentContainer";
-import { Day } from "@/lib/getOrderedDays";
 
-export default async function DayView({ params }: { params: { day: string } }) {
+export default async function DayView({ params }: { params: Promise<{ day: string }> }) {
   const cookieStore = await cookies();
   const user = cookieStore.get('userId')?.value;
 
