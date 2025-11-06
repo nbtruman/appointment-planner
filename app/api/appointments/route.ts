@@ -1,68 +1,79 @@
-import { getRedisClient } from "@/lib/redis";
+import { redis } from "@/lib/redis";
 import getAppointments from "@/lib/getAppointments";
 import { NextResponse, NextRequest } from "next/server";
 
 export type Appointment = {
-    id: string,
-    description: string,
-    dateTime: string,
-}
+  id: string;
+  description: string;
+  dateTime: string;
+};
 
 export type UserData = {
-    appointments: Appointment[],
-    contacts: [],
+  appointments: Appointment[];
+  contacts: [];
+};
+
+export async function GET(request: Request) {
+  const url = new URL(request.url);
+  const user = url.searchParams.get("user");
+  if (!user) {
+    return NextResponse.json({ error: "User ID is required" }, { status: 400 });
+  }
+
+  const userData = await getAppointments(user);
+
+  return NextResponse.json(userData.appointments);
 }
 
-export async function GET(request: Request){
-    const url = new URL(request.url);
+export async function POST(request: NextRequest) {
+  const appointment = await request.json();
+  const cookieStore = await request.cookies;
+  const user = cookieStore.get("userId")?.value;
+  if (!user) {
+    return NextResponse.json({ error: "User ID missing" }, { status: 400 });
+  }
 
-    const user = url.searchParams.get('user');
-    if (!user) {
-        return NextResponse.json({ error: 'User ID is required' }, { status: 400 });
-    }
+  const key = `user:${user}`;
 
-    const userData = await getAppointments(user);
+  // Fetch existing user data (JSON.parse because Upstash returns raw JSON)
+  const userData = (await redis.json.get(key)) as UserData | null;
 
-    return NextResponse.json(userData.appointments);
+  if (!userData) {
+    return NextResponse.json({ error: "User not found" }, { status: 404 });
+  }
+
+  userData.appointments.push(appointment);
+
+  await redis.json.set(key, "$", userData);
+
+  return NextResponse.json({ success: true, appointment, user });
 }
 
-export async function POST(request: NextRequest){
-    const appointment = await request.json();
+export async function DELETE(request: NextRequest) {
+  const url = new URL(request.url);
+  const appointmentId = url.searchParams.get("id");
+  if (!appointmentId) {
+    return NextResponse.json({ error: "No appointment ID supplied in query string" });
+  }
 
-    const cookieStore = await request.cookies;
-    const user = cookieStore.get('userId')?.value;
-    
-    const client = await getRedisClient();
+  const cookieStore = await request.cookies;
+  const user = cookieStore.get("userId")?.value;
+  if (!user) {
+    return NextResponse.json({ error: "User ID missing" }, { status: 400 });
+  }
 
-    const userData = await client.json.get(`user:${user}`) as UserData;
+  const key = `user:${user}`;
 
-    userData.appointments.push(appointment);
+  const userData = (await redis.json.get(key)) as UserData | null;
+  if (!userData) {
+    return NextResponse.json({ error: "Could not get user data" });
+  }
 
-    await client.json.set(`user:${user}`, '$', userData);
+  userData.appointments = userData.appointments.filter(
+    (appointment) => appointment.id !== appointmentId
+  );
 
-    return NextResponse.json({ success: true, appointment, user: user })
-}
+  await redis.json.set(key, "$", userData);
 
-export async function DELETE(request: NextRequest){
-    const url = new URL(request.url);
-    const appointmentId = url.searchParams.get('id');
-    if (!appointmentId) {
-        return NextResponse.json({ error: 'No appointment ID supplied in query string' });
-    }
-
-    const cookieStore = await request.cookies;
-    const user = cookieStore.get('userId')?.value;
-    
-    const client = await getRedisClient();
-
-    const userData = await client.json.get(`user:${user}`) as UserData;
-    if (!userData) {
-        return NextResponse.json({ error: 'Could not get user data' });
-    }
-
-    userData.appointments = userData.appointments.filter(appointment => appointment.id!== appointmentId);
-
-    await client.json.set(`user:${user}`, "$", userData);
-
-    return NextResponse.json({ success: true , appointmentId: appointmentId, userId: user });
+  return NextResponse.json({ success: true, appointmentId, userId: user });
 }
